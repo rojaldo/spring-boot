@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.calculator;
 
 import org.hibernate.validator.constraints.Range;
 
