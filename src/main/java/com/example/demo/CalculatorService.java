@@ -1,6 +1,10 @@
 package com.example.demo;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Service;
+
+import lombok.Getter;
 
 enum CalculatorState {
     INIT,
@@ -11,6 +15,7 @@ enum CalculatorState {
 }
 
 @Service
+@Getter
 public class CalculatorService {
 
     private float num1;
@@ -18,6 +23,8 @@ public class CalculatorService {
     private char op;
     private float result;
     private CalculatorState currentState = CalculatorState.INIT;
+
+    private ArrayList<String> operations = new ArrayList<String>();
 
     public float resolveOperation(float num1, float num2, String op) {
         switch (op) {
@@ -121,6 +128,18 @@ public class CalculatorService {
         this.op = ' ';
         this.result = 0;
         this.currentState = CalculatorState.INIT;
+    }
+
+    public ArrayList<String> getOperations() {
+        return this.operations;
+    }
+
+    public void addOperation(String operation) {
+        this.operations.add(operation);
+    }
+
+    public void clearOperations() {
+        this.operations.clear();
     }
 
 }

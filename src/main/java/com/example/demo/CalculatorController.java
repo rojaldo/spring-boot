@@ -21,6 +21,8 @@ public class CalculatorController {
         float result = this.calculatorService.resolveOperation(calculatorDto.getNum1(), calculatorDto.getNum2(), calculatorDto.getOp());
         String resulString = String.format("%.2f %s %.2f = %.2f", calculatorDto.getNum1(), calculatorDto.getOp(), calculatorDto.getNum2(), result);
         view.addAttribute("data", resulString);
+        view.addAttribute("operations", this.calculatorService.getOperations());
+        this.calculatorService.addOperation(resulString);
         return "calculator";
     }
 
