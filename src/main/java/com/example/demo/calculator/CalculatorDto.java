@@ -26,6 +26,7 @@ public class CalculatorDto {
 
     private float result;
 
+    @JsonProperty("result_string")
     private String resultString;
 
     @JsonProperty("prev_operations")

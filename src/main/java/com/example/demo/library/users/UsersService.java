@@ -1,0 +1,64 @@
+package com.example.demo.library.users;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UsersService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<UserDto> getUsers() {
+        return ((Collection<UserEntity>) this.userRepository.findAll()).stream().map(this::userEntityToDto).collect(Collectors.toList());
+    }
+
+    public IUserResonse createUser(UserDto user) {
+        if (this.userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return UserErrorDto.builder().message("User with email " + user.getEmail() + " already exists").status(400).build();
+        }
+        return this.userEntityToDto(this.userRepository.save(this.userDtoToEntity(user)));
+    }
+
+    public IUserResonse deleteUser(Long id) {
+        if (!this.userRepository.existsById(id)) {
+            return UserErrorDto.builder().message("User with id " + id + " does not exist").status(404).build();
+        }
+        this.userRepository.deleteById(id);
+        return UserDto.builder().id(id).build();
+    }
+
+    private List<UserDto> userEntitiesToDtos(List<UserEntity> users) {
+        return users.stream().map(user -> UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .age(user.getAge())
+                .build()).collect(Collectors.toList());
+    }
+
+    private UserDto userEntityToDto(UserEntity user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .age(user.getAge())
+                .build();
+    }
+
+    private UserEntity userDtoToEntity(UserDto user) {
+        return UserEntity.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .age(user.getAge())
+                .build();
+    }
+
+
+    
+}
