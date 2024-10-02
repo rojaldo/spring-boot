@@ -13,8 +13,11 @@ public class UsersService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<UserDto> getUsers() {
-        return ((Collection<UserEntity>) this.userRepository.findAll()).stream().map(this::userEntityToDto).collect(Collectors.toList());
+    public List<UserDto> getUsers(String name, int ageGt, int ageLt) {
+        if (name.isEmpty()) {
+            return this.userEntitiesToDtos(this.userRepository.findByAgeGreaterThanAndAgeLessThan(ageGt, ageLt));
+        }
+        return this.userEntitiesToDtos(this.userRepository.findByNameIgnoreCaseAndAgeGreaterThanAndAgeLessThan(name, ageGt, ageLt));
     }
 
     public IUserResonse createUser(UserDto user) {

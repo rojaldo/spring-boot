@@ -10,4 +10,6 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     List<UserEntity> findByName(String name);
     Optional<UserEntity> findByNameAndEmail(String name, String email);
     List<UserEntity> findByAgeGreaterThan(int age);
+    List<UserEntity> findByAgeGreaterThanAndAgeLessThan(int ageGt, int ageLt);
+    List<UserEntity> findByNameIgnoreCaseAndAgeGreaterThanAndAgeLessThan(String name, int ageGt, int ageLt);
 }

@@ -27,11 +27,11 @@ public class UsersRestController {
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUsers(
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "age_gt", required = false) Integer ageGt,
-            @RequestParam(name = "age_lt", required = false) Integer ageLt) {
+            @RequestParam(name = "name", required = false, defaultValue = "") String name,
+            @RequestParam(name = "age_gt", required = false, defaultValue = "0") Integer ageGt,
+            @RequestParam(name = "age_lt", required = false, defaultValue = "150") Integer ageLt) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(this.usersService.getUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(this.usersService.getUsers(name, ageGt, ageLt));
     }
 
     @PostMapping("/users")
