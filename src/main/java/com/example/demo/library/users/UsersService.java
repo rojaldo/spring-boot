@@ -24,6 +24,38 @@ public class UsersService {
         return this.userEntityToDto(this.userRepository.save(this.userDtoToEntity(user)));
     }
 
+    public IUserResonse updateUser(Long id, UserDto user) {
+        if (!this.userRepository.existsById(id)) {
+            return UserErrorDto.builder().message("User with id " + id + " does not exist").status(404).build();
+        }else if (this.userRepository.findByEmail(user.getEmail()).isPresent() && this.userRepository.findByEmail(user.getEmail()).get().getId() != id) {
+            return UserErrorDto.builder().message("User with email " + user.getEmail() + " already exists").status(400).build();
+        }
+        UserEntity userEntity = this.userDtoToEntity(user);
+        userEntity.setId(id);
+        UserEntity response = this.userRepository.save(userEntity);
+        return this.userEntityToDto(response);
+    }
+
+    public IUserResonse patchUser(Long id, UserDto user) {
+        if (!this.userRepository.existsById(id)) {
+            return UserErrorDto.builder().message("User with id " + id + " does not exist").status(404).build();
+        }else if (this.userRepository.findByEmail(user.getEmail()).isPresent() && this.userRepository.findByEmail(user.getEmail()).get().getId() != id) {
+            return UserErrorDto.builder().message("User with email " + user.getEmail() + " already exists").status(400).build();
+        }
+        UserEntity userEntity = this.userRepository.findById(id).get();
+        if (user.getName() != null) {
+            userEntity.setName(user.getName());
+        }
+        if (user.getEmail() != null) {
+            userEntity.setEmail(user.getEmail());
+        }
+        if (user.getAge() != 0) {
+            userEntity.setAge(user.getAge());
+        }
+        UserEntity response = this.userRepository.save(userEntity);
+        return this.userEntityToDto(response);
+    }
+
     public IUserResonse deleteUser(Long id) {
         if (!this.userRepository.existsById(id)) {
             return UserErrorDto.builder().message("User with id " + id + " does not exist").status(404).build();
