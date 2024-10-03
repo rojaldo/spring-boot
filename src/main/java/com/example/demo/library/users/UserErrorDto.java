@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserErrorDto implements IUserResonse {
+public class UserErrorDto implements IUserResponse {
     
     private String message;
     private int status;

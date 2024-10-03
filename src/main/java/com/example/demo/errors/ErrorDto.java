@@ -1,11 +1,14 @@
 package com.example.demo.errors;
 
+import com.example.demo.library.books.IBookResponse;
+import com.example.demo.library.users.IUserResponse;
+
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class ErrorDto {
+public class ErrorDto implements IUserResponse, IBookResponse {
         
         private String message;
         private String stackTrace;

@@ -20,14 +20,18 @@ public class UsersService {
         return this.userEntitiesToDtos(this.userRepository.findByNameIgnoreCaseAndAgeGreaterThanAndAgeLessThan(name, ageGt, ageLt));
     }
 
-    public IUserResonse createUser(UserDto user) {
+    public UserDto getUserById(Long id) {
+        return this.userEntityToDto(this.userRepository.findById(id).get());
+    }
+
+    public IUserResponse createUser(UserDto user) {
         if (this.userRepository.findByEmail(user.getEmail()).isPresent()) {
             return UserErrorDto.builder().message("User with email " + user.getEmail() + " already exists").status(400).build();
         }
         return this.userEntityToDto(this.userRepository.save(this.userDtoToEntity(user)));
     }
 
-    public IUserResonse updateUser(Long id, UserDto user) {
+    public IUserResponse updateUser(Long id, UserDto user) {
         if (!this.userRepository.existsById(id)) {
             return UserErrorDto.builder().message("User with id " + id + " does not exist").status(404).build();
         }else if (this.userRepository.findByEmail(user.getEmail()).isPresent() && this.userRepository.findByEmail(user.getEmail()).get().getId() != id) {
@@ -39,7 +43,7 @@ public class UsersService {
         return this.userEntityToDto(response);
     }
 
-    public IUserResonse patchUser(Long id, UserDto user) {
+    public IUserResponse patchUser(Long id, UserDto user) {
         if (!this.userRepository.existsById(id)) {
             return UserErrorDto.builder().message("User with id " + id + " does not exist").status(404).build();
         }else if (this.userRepository.findByEmail(user.getEmail()).isPresent() && this.userRepository.findByEmail(user.getEmail()).get().getId() != id) {
@@ -59,7 +63,7 @@ public class UsersService {
         return this.userEntityToDto(response);
     }
 
-    public IUserResonse deleteUser(Long id) {
+    public IUserResponse deleteUser(Long id) {
         if (!this.userRepository.existsById(id)) {
             return UserErrorDto.builder().message("User with id " + id + " does not exist").status(404).build();
         }

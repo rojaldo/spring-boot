@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto implements IUserResonse {
+public class UserDto implements IUserResponse {
 
     private long id;
 

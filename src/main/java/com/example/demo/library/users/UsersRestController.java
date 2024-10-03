@@ -35,8 +35,8 @@ public class UsersRestController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<IUserResonse> createUser(@RequestBody @Validated UserDto user) {
-        IUserResonse response = this.usersService.createUser(user);
+    public ResponseEntity<IUserResponse> createUser(@RequestBody @Validated UserDto user) {
+        IUserResponse response = this.usersService.createUser(user);
         if (response instanceof UserErrorDto) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((UserErrorDto) response);
         }
@@ -44,8 +44,8 @@ public class UsersRestController {
     }
 
     @PutMapping("users/{id}")
-    public ResponseEntity<IUserResonse> putMethodName(@PathVariable Long id, @RequestBody UserDto userDto) {
-        IUserResonse response = this.usersService.updateUser(id, userDto);
+    public ResponseEntity<IUserResponse> putMethodName(@PathVariable Long id, @RequestBody UserDto userDto) {
+        IUserResponse response = this.usersService.updateUser(id, userDto);
         if (response instanceof UserErrorDto) {
             if (((UserErrorDto) response).getStatus() == 404) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body((UserErrorDto) response);
@@ -57,8 +57,8 @@ public class UsersRestController {
     }
 
     @PatchMapping("users/{id}")
-    public ResponseEntity<IUserResonse> patchMethodName(@PathVariable Long id, @RequestBody UserDto userDto) {
-        IUserResonse response = this.usersService.patchUser(id, userDto);
+    public ResponseEntity<IUserResponse> patchMethodName(@PathVariable Long id, @RequestBody UserDto userDto) {
+        IUserResponse response = this.usersService.patchUser(id, userDto);
         if (response instanceof UserErrorDto) {
             if (((UserErrorDto) response).getStatus() == 404) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body((UserErrorDto) response);
@@ -70,8 +70,8 @@ public class UsersRestController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<IUserResonse> deleteUser(@PathVariable Long id) {
-        IUserResonse response = this.usersService.deleteUser(id);
+    public ResponseEntity<IUserResponse> deleteUser(@PathVariable Long id) {
+        IUserResponse response = this.usersService.deleteUser(id);
         if (response instanceof UserErrorDto) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((UserErrorDto) response);
         }
