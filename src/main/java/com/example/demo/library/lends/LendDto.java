@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LendDto {
+public class LendDto implements ILendResponse {
 
     Long id;
 

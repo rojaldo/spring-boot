@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class UsersService {
 
     @Autowired
-    private UserRepository userRepository;
+    private LibraryUserRepository userRepository;
 
     public List<UserDto> getUsers(String name, int ageGt, int ageLt) {
         if (name.isEmpty()) {

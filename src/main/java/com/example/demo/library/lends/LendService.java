@@ -8,11 +8,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.errors.ErrorDto;
 import com.example.demo.library.books.BookDto;
 import com.example.demo.library.books.BookEntity;
 import com.example.demo.library.books.BooksRespository;
 import com.example.demo.library.books.BooksService;
-import com.example.demo.library.users.UserRepository;
+import com.example.demo.library.users.LibraryUserRepository;
 import com.example.demo.library.users.UsersService;
 import com.example.demo.library.users.UserDto;
 import com.example.demo.library.users.UserEntity;
@@ -28,7 +29,7 @@ public class LendService {
     private BooksRespository booksRepository;
 
     @Autowired
-    private UserRepository usersRepository;
+    private LibraryUserRepository usersRepository;
 
     @Autowired
     private BooksService bookService;
@@ -77,6 +78,43 @@ public class LendService {
                 .user((UserDto)usersService.getUserById(lend.getUserId()))
                 .lendDate(lend.lendDate)
                 .dueDate(lend.dueDate)
+                .build();
+    }
+
+    public ILendResponse updateLend(Long id, LendRequest lend) {
+        Optional<LendEntity> lendEntity = lendRepository.findById(id);
+        if (lendEntity.isEmpty()) {
+            return ErrorDto.builder()
+                    .message("Lend not found")
+                    .status(404)
+                    .build();
+        }
+        LendEntity lendToUpdate = lendEntity.get();
+        lendToUpdate.setLendDate(lend.lendDate);
+        lendToUpdate.setDueDate(lend.dueDate);
+        lendToUpdate.setBook(this.booksRepository.findById(lend.getBookId()).get());
+        lendToUpdate.setUser(this.usersRepository.findById(lend.getUserId()).get());
+        lendToUpdate.setStatus(lend.getStatus());
+        lendRepository.save(lendToUpdate);
+        return LendDto.builder()
+                .book((BookDto)bookService.getBookById(lendToUpdate.getBook().getId()))
+                .user((UserDto)usersService.getUserById(lendToUpdate.getUser().getId()))
+                .lendDate(lendToUpdate.getLendDate())
+                .dueDate(lendToUpdate.getDueDate())
+                .build();
+    }
+
+    public ILendResponse deleteLend(Long id) {
+        Optional<LendEntity> lendEntity = lendRepository.findById(id);
+        if (lendEntity.isEmpty()) {
+            return ErrorDto.builder()
+                    .message("Lend not found")
+                    .status(404)
+                    .build();
+        }
+        lendRepository.delete(lendEntity.get());
+        return LendDto.builder().
+                id(id)
                 .build();
     }
 

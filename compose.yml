@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: on-failure
+    networks:
+      - mynet
+    
+  db:
+    image: postgres
+    networks:
+      - mynet
+    environment:
+      POSTGRES_DB: dbname
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+networks:
+  mynet:
+    driver: bridge

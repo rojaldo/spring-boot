@@ -24,4 +24,6 @@ public class LendRequest {
     @JsonProperty("due_date")
     String dueDate;
 
+    byte status;
+
 }
